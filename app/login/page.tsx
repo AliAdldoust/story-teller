@@ -99,3 +99,27 @@ export default function Profile() {
 
     )
 }
+
+
+
+async function createUser(){
+
+    const response = await fetch("/api/auth/signup", {
+
+            method:"POST",
+            headers:{
+                        "Content-Type": "application/json"
+            },
+            body:JSON.stringify({
+                email:
+                password:
+            })
+
+
+    })
+
+          const result =   await response.json()
+            console.log(result);
+
+
+}
