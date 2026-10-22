@@ -15,7 +15,7 @@ export default function Home() {
 
         <img src='/main.png' className={styles.mainImage}/>
 
-        <Link href="/profile" className={styles.user}>
+        <Link href="/login" className={styles.user}>
                   <User  className={styles.icon}/>
                   <p> حساب کاربری </p>
         </Link>
