@@ -1,0 +1,304 @@
+.section1 {
+  padding: 0, 0;
+  text-align: end;
+    position: relative;
+}
+
+.mainImage{
+    width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.title {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: white;
+  font-size: 48px;
+  text-align: center;
+  z-index: 1;
+}
+
+.user {
+
+    position: absolute;
+    top: 20px;  
+    right: 20px; 
+      display: flex;
+     align-items: center;
+     gap: 8px;
+    z-index: 2;
+    display: flex; 
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+
+
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+}
+
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.imageButton {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.section {
+  text-align: end;
+  padding: 40px 20px;
+}
+
+
+body {
+  margin: 0;
+}
+
+
+
+/*section2*/
+
+
+.section2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 30px;
+}
+
+.section2 p {
+    width: 100%;
+    display: flex;
+    text-align: right;
+    padding-right: 30px;
+    gap: 24px;
+    direction: rtl;
+    padding-left: 30px;
+
+
+}
+
+.section2 p::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: white;
+    align-self: center;
+
+}
+
+
+.allStories {
+  display: inline-block;
+  padding: 12px 32px;
+  margin-top: 20px;
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #e1c01c, #b323e8);
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+
+  box-shadow: 0 0 10px rgba(200, 62, 90, 0.5);
+}
+
+
+
+.createStory {
+  display: inline-block;
+  padding: 0px 22px;
+  margin-top: 20px;
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #e1c01c, #b323e8);
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+
+  box-shadow: 0 0 10px rgba(200, 62, 90, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+
+/* Glow on hover */
+.createStory:hover {
+  box-shadow: 0 0 20px #8e44ad, 0 0 40px #3498db;
+  transform: translateY(-3px);
+}
+
+
+/* Create two stars */
+.createStory::before,
+.createStory::after {
+  content: "✦";
+  position: absolute;
+  color: #ffe66d;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* First star */
+.createStory::before {
+  top: 0;
+  left: 20%;
+  font-size: 20px;
+}
+
+/* Second star */
+.createStory::after {
+  top: 0;
+  right: 20%;
+  font-size: 16px;
+}
+
+/* Make stars float when hovering */
+.createStory:hover::before {
+  animation: starFloat 1.5s ease-out forwards;
+}
+
+.createStory:hover::after {
+  animation: starFloat 1.5s ease-out 0.3s forwards;
+}
+
+@keyframes starFloat {
+  0% {
+    transform: translateY(0) scale(3.0) rotate(0deg);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-50px) scale(1.2) rotate(90deg);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 250px;
+  padding: 15px;
+
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  text-decoration: none;
+  color: #333;
+
+  cursor: pointer;
+    transition: transform 1.5s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.cardImage {
+  width: 100%;
+    height: 100%;
+
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.cardTitle {
+  margin: 12px 0 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.card:hover {
+  transform: rotateY(360deg);
+}
+
+
+
+body {
+  background-color: #263859;
+  color: white;
+  margin: 0;
+  min-height: 100%;
+}
+
+.section3 {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  margin-top: 40px; /* Space between section2 and section3 */
+}
+
+.backgroundGif {
+  position: absolute;  flex-wrap: wrap;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.titleLink {
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  color: white;
+}
+
+.section4 {
+  text-align: right;
+  direction: rtl;
+  padding-right: 30px;
+}
+
