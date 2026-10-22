@@ -1,5 +1,93 @@
+body{
+    margin: 0;
+
+}
+
 .container{
 
     display: flex;
+      direction: rtl;
     
+}
+
+.backLink {
+  align-self: flex-start;
+  color: #7652a5;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.backLink:hover {
+  color: red;
+}
+
+
+.loginSection{
+    padding: 30px;
+}
+
+
+.form{
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.form label {
+  font-size: 15px;
+  color: #49336b;
+  font-weight: 600;
+}
+
+
+.form input {
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid #ddd2eb;
+  border-radius: 10px;
+  background-color: white;
+  font-size: 14px;
+  outline: none;
+
+}
+
+.form input:focus {
+  border-color: #8b65bd;
+  box-shadow: 0 0 0 3px rgba(139, 101, 189, 0.12);
+}
+
+
+.button {
+  margin-top: 12px;
+  padding: 14px;
+  border: none;
+  border-radius: 20px;
+  background-color: #7652a5;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+
+.imageSection {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #e8dff5;
+}
+
+
+
+
+.image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: fill;
 }

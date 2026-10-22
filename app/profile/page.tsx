@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 
@@ -9,7 +8,7 @@ export default function Profile() {
     return(
         <main className={styles.container}>
 
-                <section>
+                <section className={styles.loginSection}>
 
                     <Link href="/" className={styles.backLink}>بازگشت به صفحه اصلی</Link>
 
@@ -18,45 +17,38 @@ export default function Profile() {
                                 <p>برای ورود به حساب کاربری خود اطلاعاتتان را وارد کنید</p>
 
 
-                            <form>
-                                <label htmlFor="email"></label>
+                            <form className={styles.form}>
+                                <label htmlFor="email">ایمیل</label>
 
                                 <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
 
 
-                                <label htmlFor="password"></label>
+                                <label htmlFor="password">رمز عبور</label>
 
                                 <input id="password" type="password" required placeholder="رمز عبور خود را وارد کنید"></input>
-
-                                <button type="submit"> ورود به حساب کاربری</button>
+  
+                                <button type="submit" className={styles.button}> ورود به حساب کاربری</button>
 
                                 <p>
                                     هنوز حساب کاربری ندارید؟
-                                    <Link href="/register"> ثبت‌نام کنید</Link>
+                                    <Link href="/register" className={styles.backLink}> ثبت‌نام کنید</Link>
                                 </p>
 
                             </form>
+
                     </div>
                     
-
-
-                </section>
-
-
-                <section>
-
-                    <img src="/register.jpg" alt="register cover image"/>
-
-
-                    <h2>به دنیای قصه‌ها خوش آمدید</h2>
-
-
                 </section>
 
 
 
 
+                <section className={styles.imageSection}>
 
+                    <img src="/register.jpg" alt="register cover image" 
+                                className={styles.image}/>
+
+                </section>
 
         </main>
 
