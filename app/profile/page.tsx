@@ -2,8 +2,13 @@
 
 import styles from "./page.module.css";
 import Link from "next/link";
+import {useState} from "react"
+
+ 
 
 export default function Profile() {
+
+    const [isRegister, setIsRegister] = useState(true);
 
     return(
         <main className={styles.container}>
@@ -13,28 +18,65 @@ export default function Profile() {
                     <Link href="/" className={styles.backLink}>بازگشت به صفحه اصلی</Link>
 
                     <div>
-                                <h1>خوش آمدید👋</h1>
-                                <p>برای ورود به حساب کاربری خود اطلاعاتتان را وارد کنید</p>
+                                <h1 className={styles.title}>خوش آمدید👋</h1>
 
 
-                            <form className={styles.form}>
-                                <label htmlFor="email">ایمیل</label>
 
-                                <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
+                                {isRegister ? 
+                                (
+                                <>
+                                        <p>برای ورود به حساب کاربری خود اطلاعاتتان را وارد کنید</p>
 
 
-                                <label htmlFor="password">رمز عبور</label>
+                                        <form className={styles.form}>
+                                            <label htmlFor="email">ایمیل</label>
 
-                                <input id="password" type="password" required placeholder="رمز عبور خود را وارد کنید"></input>
-  
-                                <button type="submit" className={styles.button}> ورود به حساب کاربری</button>
+                                            <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
 
-                                <p>
-                                    هنوز حساب کاربری ندارید؟
-                                    <Link href="/register" className={styles.backLink}> ثبت‌نام کنید</Link>
-                                </p>
 
-                            </form>
+                                            <label htmlFor="password">رمز عبور</label>
+
+                                            <input id="password" type="password" required placeholder="رمز عبور خود را وارد کنید"></input>
+            
+                                            <button type="button" className={styles.button}> ورود به حساب کاربری</button>
+
+                                            <p>
+                                                هنوز حساب کاربری ندارید؟
+                                                <button type="button" className={styles.button2}
+                                                 onClick={() => 
+                                                    setIsRegister(false)}>ثبت‌نام کنید</button>
+                                            </p>
+
+                                        </form>
+                                </>
+
+                                ) : (
+                                <>
+                                    <button type="button" className={styles.backButton}
+                                         onClick={() => setIsRegister(true)}>  بازگشت ←</button>
+
+
+                                    <form className={styles.form}>
+
+            
+
+
+                                        <label htmlFor="email">ایمیل</label>
+
+                                        <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
+
+
+                                        <label htmlFor="password">رمز عبور</label>
+
+                                        <input id="password" type="password" required placeholder="رمز عبور خود را تعیین کنید"></input>
+        
+
+                                        <button type="button" className={styles.button} onClick={() => setIsRegister(false)}>ثبت‌نام</button>
+
+                                </form>
+                                
+                                </>
+                                )}
 
                     </div>
                     
