@@ -9,6 +9,13 @@ import {useState} from "react"
 export default function Profile() {
 
     const [isRegister, setIsRegister] = useState(true);
+    const [email, setEmail] = useState("")
+    const [pass, setPass] = useState("")
+    const [username, setUsername] = useState("")
+
+
+
+
 
     return(
         <main className={styles.container}>
@@ -29,6 +36,7 @@ export default function Profile() {
 
 
                                         <form className={styles.form}>
+                                            
                                             <label htmlFor="email">ایمیل</label>
 
                                             <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
@@ -58,22 +66,37 @@ export default function Profile() {
 
                                     <form className={styles.form}>
 
-            
+                                        <label htmlFor="username">نام</label>
+
+                                        <input id="username"
+                                            required placeholder="برای خود نام انتخاب کنید"
+                                            onChange={(e) => setUsername(e.target.value)}>
+
+                                        </input>
+
+
 
 
                                         <label htmlFor="email">ایمیل</label>
 
-                                        <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
+                                        <input id="email" type="email"
+                                            required placeholder="ایمیل خود را وارد کنید"
+                                            onChange={(e) => setEmail(e.target.value)}></input>
 
 
                                         <label htmlFor="password">رمز عبور</label>
 
-                                        <input id="password" type="password" required placeholder="رمز عبور خود را تعیین کنید"></input>
+
+
+                                        <input id="password" type="password" 
+                                            required placeholder="رمز عبور خود را تعیین کنید"
+                                            onChange={(e) => setPass(e.target.value)}></input>
         
 
-                                        <button type="button" className={styles.button} onClick={() => setIsRegister(false)}>ثبت‌نام</button>
+                                        <button type="button" className={styles.button} 
+                                            onClick={() => (setIsRegister(true), createUser(username, email, pass))}>ثبت‌نام</button>
 
-                                </form>
+                                    </form>
                                 
                                 </>
                                 )}
@@ -102,24 +125,32 @@ export default function Profile() {
 
 
 
-async function createUser(){
+async function createUser(userName: string, userEmail:string, userPass:string){
 
-    const response = await fetch("/api/auth/signup", {
+    try{
 
-            method:"POST",
-            headers:{
-                        "Content-Type": "application/json"
-            },
-            body:JSON.stringify({
-                email:
-                password:
-            })
+        const response = await fetch("/api/auth/signup", {
+    
+                method:"POST",
+                headers:{
+                            "Content-Type": "application/json"
+                },
+                body:JSON.stringify({
+                    username: userName,
+                    email:userEmail,
+                    password:userPass
+                })
+    
+    
+        })
+    
+              const result =   await response.json()
+                console.log(result);
 
+    }catch(error){
+        console.error("Signup error:", error);
+    }
 
-    })
-
-          const result =   await response.json()
-            console.log(result);
 
 
 }
