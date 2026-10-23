@@ -7,7 +7,7 @@ import BackgroundSlider from "./components/BackgroundSlider";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { House, Phone, User, Menu } from "lucide-react";
+import {User} from "lucide-react";
 
 export default function Home() {
   return (
@@ -21,8 +21,6 @@ export default function Home() {
                   <User  className={styles.icon}/>
                   <p> حساب کاربری </p>
         </Link>
-
-        {/* <h1 className={styles.title}>مادربزرگ قصه گو </h1> */}
 
       </section>
 
