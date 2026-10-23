@@ -2,6 +2,8 @@
 
 import storiesData from "@/data/stories";
 
+import BackgroundSlider from "./components/BackgroundSlider";
+
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./page.module.css";
@@ -13,14 +15,14 @@ export default function Home() {
       
       <section className={styles.section1}>
 
-        <img src='/main.png' className={styles.mainImage}/>
+        <BackgroundSlider />
 
         <Link href="/login" className={styles.user}>
                   <User  className={styles.icon}/>
                   <p> حساب کاربری </p>
         </Link>
 
-        <h1 className={styles.title}>مادربزرگ قصه گو </h1>
+        {/* <h1 className={styles.title}>مادربزرگ قصه گو </h1> */}
 
       </section>
 
