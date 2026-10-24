@@ -110,11 +110,18 @@ export default function UserProfile() {
             <div>
                 <span className={styles.eyebrow}>✨ دنیای قصه‌های تو ✨</span>
                 <h1>سلام {user.username}! 👋</h1>
+                <Link href="/" className={styles.favoriteButton}>
+                      برگشت به خانه 
+                </Link>
+
             </div>
 
             <div className={styles.avatar}>
                 🧙‍♀️
             </div>
+
+
+
         </section>
 
         {/* Account information */}

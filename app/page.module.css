@@ -6,6 +6,9 @@
 }
 
 
+
+
+
 .authStatus {
     position: absolute;
     top: 20px;
@@ -239,7 +242,7 @@ body {
   color: #333;
 
   cursor: pointer;
-    transition: transform 1.5s ease-in-out;
+  transition: transform 1.5s ease-in-out;
   transform-style: preserve-3d;
 }
 
@@ -259,6 +262,8 @@ body {
 
 .card:hover {
   transform: rotateY(360deg);
+  box-shadow: 0 0 20px #8e44ad, 0 0 40px #3498db;
+
 }
 
 
