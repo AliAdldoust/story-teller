@@ -6,6 +6,14 @@
 }
 
 
+.authStatus {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+
 .mainImage{
     width: 100%;
   height: 100%;
@@ -124,6 +132,14 @@ body {
   font-weight: bold;
 
   box-shadow: 0 0 10px rgba(200, 62, 90, 0.5);
+
+  transition: transform 0.7s ease;
+
+}
+
+.allStories:hover{
+  transform: translateY(-7px);
+  box-shadow: 0 0 20px #8e44ad, 0 0 40px #3498db;
 }
 
 

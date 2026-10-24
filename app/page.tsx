@@ -7,7 +7,8 @@ import BackgroundSlider from "./components/BackgroundSlider";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./page.module.css";
-import {User} from "lucide-react";
+
+import AuthStatus from "@/app/components/AuthStatus";
 
 export default function Home() {
   return (
@@ -15,12 +16,11 @@ export default function Home() {
       
       <section className={styles.section1}>
 
-        <BackgroundSlider />
+            <BackgroundSlider />
 
-        <Link href="/login" className={styles.user}>
-                  <User  className={styles.icon}/>
-                  <p> حساب کاربری </p>
-        </Link>
+            <div className={styles.authStatus}>
+                <AuthStatus />
+            </div>
 
       </section>
 
