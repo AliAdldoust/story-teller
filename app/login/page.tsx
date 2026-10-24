@@ -2,18 +2,26 @@
 
 import styles from "./page.module.css";
 import Link from "next/link";
-import {useState} from "react"
 
- 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Profile() {
+
+
+
+
+
+
+export default function Login() {
 
     const [isRegister, setIsRegister] = useState(true);
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const [username, setUsername] = useState("")
-
-
+    
+    const router = useRouter();
+    const [loginError, setLoginError] = useState("");
+    
 
 
 
@@ -35,18 +43,29 @@ export default function Profile() {
                                         <p>برای ورود به حساب کاربری خود اطلاعاتتان را وارد کنید</p>
 
 
-                                        <form className={styles.form}>
+                                        <form className={styles.form} 
+                                                onSubmit={(e) => {e.preventDefault();  handleLogin(email, pass, router, setLoginError);}}>
                                             
                                             <label htmlFor="email">ایمیل</label>
 
-                                            <input id="email" type="email" required placeholder="ایمیل خود را وارد کنید"></input>
+                                            <input id="email" type="email"
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            required placeholder="ایمیل خود را وارد کنید"></input>
 
 
                                             <label htmlFor="password">رمز عبور</label>
 
-                                            <input id="password" type="password" required placeholder="رمز عبور خود را وارد کنید"></input>
+                                            <input id="password" type="password" 
+                                                onChange={(e) => setPass(e.target.value)}
+                                            required placeholder="رمز عبور خود را وارد کنید"></input>
             
-                                            <button type="button" className={styles.button}> ورود به حساب کاربری</button>
+                        
+
+                                            <button type="submit" className={styles.button}>
+                                                ورود به حساب کاربر
+                                            </button>
+
+
 
                                             <p>
                                                 هنوز حساب کاربری ندارید؟
@@ -153,4 +172,41 @@ async function createUser(userName: string, userEmail:string, userPass:string){
 
 
 
+}
+
+
+
+
+
+async function handleLogin( 
+    userEmail:string, userPass:string, userRouter: ReturnType<typeof useRouter>,
+     userSetLoginError: (message: string) => void) {
+
+        userSetLoginError("");
+        
+
+        try {
+            const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: userEmail,
+                password: userPass,
+            }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+            userSetLoginError(data.message || "Login failed.");
+            return;
+            }
+
+            // Login succeeded: navigate to the profile page.
+            userRouter.push("/profile");
+        } catch {
+            userSetLoginError("Something went wrong. Please try again.");
+        }
 }
