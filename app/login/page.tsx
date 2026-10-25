@@ -30,7 +30,7 @@ export default function Login() {
 
                 <section className={styles.loginSection}>
 
-                    <Link href="/" className={styles.backLink}>بازگشت به صفحه اصلی</Link>
+                    <Link href="/" className={styles.backLink}>   بازگشت به خانه  </Link>
 
                     <div>
                                 <h1 className={styles.title}>خوش آمدید👋</h1>
@@ -71,7 +71,7 @@ export default function Login() {
                                                 هنوز حساب کاربری ندارید؟
                                                 <button type="button" className={styles.button2}
                                                  onClick={() => 
-                                                    setIsRegister(false)}>ثبت‌نام کنید</button>
+                                                    setIsRegister(false)}>ثبت ‌نام کنید </button>
                                             </p>
 
                                         </form>

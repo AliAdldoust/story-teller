@@ -19,6 +19,11 @@ body{
   color: #7652a5;
   text-decoration: none;
   font-size: 15px;
+   border: 2px solid #b99add;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fffaff, #f0e6ff);
+  color: #593777;
+  padding: 10px 7px;
 }
 
 .backLink:hover {

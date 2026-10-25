@@ -7,9 +7,6 @@ import styles from "./page.module.css";
 
 import {useState, useEffect} from 'react'
 
-
-
-
 type Story = {
   id: number | string;
   title: string;
@@ -18,36 +15,37 @@ type Story = {
 };
 
      
+
 export default function Stories(){
   const [stories, setStories] = useState<Story[]>([]);
 
   
 
-useEffect(() => {
+    useEffect(() => {
 
-  async function fetchStories(){
+      async function fetchStories(){
 
-    try{
-      const response = await fetch("/api/stories")
+        try{
+          const response = await fetch("/api/stories")
 
-      if (!response.ok){
-            throw new Error("Failed to fetch stories");
+          if (!response.ok){
+                throw new Error("Failed to fetch stories");
+          }
+
+          const data:Story[] = await response.json()
+          setStories(data);
+
+
+        }catch(error){
+            console.error(error);
+        }
+
+
       }
 
-      const data:Story[] = await response.json()
-      setStories(data);
+      fetchStories()
 
-
-    }catch(error){
-        console.error(error);
-    }
-
-
-  }
-
-  fetchStories()
-
-}, [])
+    }, [])
 
 
 
@@ -56,12 +54,13 @@ useEffect(() => {
     return (
         <section className={styles.section2}>
    
-              <p> «اینجا قصهها زنده اند؛ فقط کافی است چشمهایت را ببندی و گوش کنی.»</p>
+              <p> «اینجا قصه ها زنده اند؛ فقط کافیه چشماتو ببندی و گوش کنی.»</p>
    
               <div className={styles.cardsContainer}>
                 {stories.map((story) => (
                   <div key={story.id} className={styles.card}>
                     {story.image_url && (
+                      <Link href={`/stories/${story.id}`} className={styles.cardImageLink}>
                       <Image
                         src={story.image_url}
                         alt={story.title}
@@ -69,9 +68,10 @@ useEffect(() => {
                         height={200}
                         className={styles.cardImage}
                       />
+                      </Link>
                     )}
 
-                    <h3 className={styles.cardTitle}>{story.title}</h3>
+                      <h3 className={styles.cardTitle}>{story.title}</h3>
                   </div>
                 ))}
               </div>

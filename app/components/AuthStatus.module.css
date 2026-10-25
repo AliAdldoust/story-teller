@@ -11,13 +11,14 @@
 
   padding: 8px 14px;
   border-radius: 14px;
+    background-color: #f0e8fa;
+
 
   transition: background-color 0.3s ease,
               transform 0.3s ease;
 }
 
 .authLink:hover {
-  background-color: #f0e8fa;
   transform: translateY(-2px);
 }
 

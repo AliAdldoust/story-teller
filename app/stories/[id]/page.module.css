@@ -1,0 +1,80 @@
+
+.main {
+  direction: rtl;
+  padding: 16px;    
+
+}
+
+
+.readAloud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: rtl;
+  padding-top: 20px;
+    padding-bottom: 20px;
+
+
+}
+
+.readAloud p {
+  margin: 0;
+}
+
+.article{
+  padding-top: 20px;
+}
+
+
+.soundButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #f0e8fa;
+  color: #51366f;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.soundButton:hover {
+  background: #dfcef4;
+  transform: scale(1.1);
+}
+
+
+
+.readStory {
+  display: inline-block;
+  margin: 15px 0;
+  padding: 4px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #593777;
+  background: linear-gradient(135deg, #fffaff, #f0e6ff);
+  border: 2px solid #b99add;
+  border-radius: 15px;
+  outline: 1px solid #e0c9f5;
+  outline-offset: 4px;
+  box-shadow: 0 5px 15px rgba(89, 55, 119, 0.15);
+}
+
+
+.backLink {
+  align-self: flex-start;
+  color: #7652a5;
+  text-decoration: none;
+  font-size: 15px;
+  border: 2px solid #b99add;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fffaff, #f0e6ff);
+  color: #593777;
+  padding: 10px 7px;
+}
+
+.backLink:hover {
+  color: red;
+}

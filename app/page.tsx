@@ -1,18 +1,69 @@
 "use client";
 
-import storiesData from "@/data/stories";
-
 import BackgroundSlider from "./components/BackgroundSlider";
 
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./page.module.css";
+import {useState, useEffect} from 'react'
+
+
+
+
+type Story = {
+  id: number | string;
+  title: string;
+  content: string;
+  image_url: string | null;
+};
+
 
 
 
 import AuthStatus from "@/app/components/AuthStatus";
 
 export default function Home() {
+
+ const [stories, setStories] = useState<Story[]>([]);
+
+  
+
+    useEffect(() => {
+
+      async function fetchStories(){
+
+        try{
+          const response = await fetch("/api/stories")
+
+          if (!response.ok){
+                throw new Error("Failed to fetch stories");
+          }
+
+          const data:Story[] = await response.json()
+          setStories(data);
+
+
+        }catch(error){
+            console.error(error);
+        }
+
+
+      }
+
+      fetchStories()
+
+    }, [])
+
+
+
+
+
+
+
+
+
+
+
   return (
     <main>
       
@@ -30,19 +81,20 @@ export default function Home() {
 
             <p>جدیدترین ها</p>
 
-            {storiesData.map((story) => (
+            {stories.slice(-3).map((story) => (
                     <Link
-                      href={story.href}
+                      href={`/stories/${story.id}`}
                       className={styles.card}
                       key={story.id}
                     >
-                      <Image
-                        src={story.image}
+                      {story.image_url &&
+                      (<Image
+                        src={story.image_url}
                         alt={story.title}
                         width={300}
                         height={200}
                         className={styles.cardImage}
-                      />
+                      />)}
 
                       <h3 className={styles.cardTitle}>{story.title}</h3>
                     </Link>

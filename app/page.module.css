@@ -248,7 +248,7 @@ body {
 
 .cardImage {
   width: 100%;
-    height: 100%;
+  height: 200px;
 
   object-fit: cover;
   border-radius: 10px;
@@ -273,7 +273,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 400px;
+  min-height: 500px;
   margin-top: 40px; /* Space between section2 and section3 */
 }
 
