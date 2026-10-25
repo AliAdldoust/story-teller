@@ -1,9 +1,9 @@
 import OpenAI from "openai";
 
-const hf = new OpenAI({
-    apiKey: process.env.HF_TOKEN,
+const client = new OpenAI({
+  baseURL: "https://api.gapgpt.app/v1",
+  apiKey: process.env.GAPGPT_API_KEY,
 });
-
 
 
 export async function POST(request){
@@ -22,14 +22,19 @@ export async function POST(request){
 
 
         // Inside your POST function:
-        const response = await hf.chat.completions.create({
-            model: "openai/gpt-oss-120b:fastest",
+        const response = await client.chat.completions.create({
+            model: "gpt-4o",
 
             messages: [
                 {
                     role: "system",
                     content:
-                        "You are a creative storyteller for children. Write imaginative, age-appropriate stories using all the words provided by the user.",
+                        `You are a creative storyteller for children in Persian language. All your generated content 
+                         must be in Persian.
+                         Your content must not be anything other than a story.
+                         Write imaginative stories for children aged between 5 to 10.
+                         The concept of the story must be around the words provided by the user. You must use that words.
+                         if no words are provided, do not ask or explain, generate a random story.`,
                 },
                 {
                     role: "user",

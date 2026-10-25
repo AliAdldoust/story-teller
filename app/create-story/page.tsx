@@ -3,6 +3,11 @@
 import { useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
+import {Volume2} from 'lucide-react'
+
+
+
+
 
 export default function CreateStory() {
     const [step, setStep] = useState(1);
@@ -17,15 +22,66 @@ export default function CreateStory() {
 
 
 
+
+
+
+
+
+   async function handleReadAloud() {
+    try {
+
+        const response = await fetch("/api/tts", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            text: story,
+        }),
+        });
+
+        if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Could not generate audio.");
+        }
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        const audio = new Audio(audioUrl);
+
+        audio.onended = () => URL.revokeObjectURL(audioUrl);
+
+        await audio.play();
+    } catch (error) {
+        console.error("Audio error:", error);
+        alert(
+        error instanceof Error
+            ? error.message
+            : "Could not play the story."
+        );
+    }
+    }
+
+
+
+
+
+
+
+
+
+
+
   return (
 
 
     <main className={styles.container}>
 
         <section>
-            <Link href="/" className={styles.backLink}>
-                        بازگشت به صفحه اصلی
-            </Link>
+                <Link href="/" className={styles.backLink}>
+                      برگشت به خانه 
+                </Link>
 
         </section>
 
@@ -33,7 +89,7 @@ export default function CreateStory() {
         <div>
 
                     <form className={`${styles.form} ${step === 1 ? styles.visible : styles.hidden}`}>
-                            <h1 className={styles.title}>قصه‌ات چند کلمه باشد؟ 📚</h1>
+                            <h1 className={styles.title}>قصت چند کلمه باشه؟ 📚</h1>
 
                             <p className={styles.description}>
                             ! تعداد کلمات قصه‌ات را انتخاب کن
@@ -73,14 +129,14 @@ export default function CreateStory() {
         <div>                 
                 <form className={`${styles.form} ${step === 2 ? styles.visible : styles.hidden}`}>
 
-                        <h1>چه کلماتی در داستان باشند؟</h1>
+                        <h1>چه کلماتی تو داستانت باشن؟</h1>
 
                         <p>
-                        کلمات دلخواه خود را وارد کنید تا در داستان استفاده شوند
+                        کلماتتو وارد کن تا داستانت با اونا باشن  
                         </p>
 
                         <label htmlFor="keywords">
-                       : کلمات موردنظر
+                       :کلمات 
                         </label>
 
                         <textarea
@@ -92,6 +148,7 @@ export default function CreateStory() {
                         />
 
                         <button
+                            className={styles.createStory}
                             type="button"
                             onClick={async () => {
                                 const generatedStory = await generateStory(
@@ -110,11 +167,24 @@ export default function CreateStory() {
 
     {step === 3 && (
                         <div className={styles.form}>
-                            <h1>داستان شما آماده است! 📚</h1>
-
+                            <h1> از داستانت لذت ببر </h1>
                             <p>{story}</p>
+                                    <div className={styles.readAloud}>
+                                        <p className={styles.readStory}>قصه را بخوان</p>
+
+                                        <button
+                                        type="button"
+                                        onClick={handleReadAloud}
+                                        aria-label=" قصه را بخوان"
+                                        className={styles.soundButton}
+                                        >
+                                        <Volume2 size={22} />
+                                        </button>
+                                    </div>
+                            <button  className={styles.createStory} onClick={() => window.location.reload()}>دوباره</button>
                         </div>
                     )}
+
 
 
 
@@ -123,6 +193,8 @@ export default function CreateStory() {
     </main>
   );
 }
+
+
 
 async function generateStory(words, number) {
 

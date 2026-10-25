@@ -83,19 +83,131 @@
   transform: scale(1.03);
 }
 
+
+
+
 .backLink {
-  position: absolute;
-  top: 25px;
+    position: absolute;
+      top: 25px;
   right: 25px;
 
-  color: #fff4d6;
+  display: inline-block;
+  padding: 12px 32px;
+  margin-top: 20px;
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #e1c01c, #b323e8);
+  color: white;
   text-decoration: none;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+
+  box-shadow: 0 0 10px rgba(200, 62, 90, 0.5);
+
+  transition: transform 0.7s ease;
+
+}
+
+.backLink:hover{
+  transform: translateY(-7px);
+  box-shadow: 0 0 20px #8e44ad, 0 0 40px #3498db;
+}
+
+
+
+
+
+.createStory {
+  display: inline-block;
+  padding: 15px 25px;
+  margin-top: 20px;
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #e1c01c, #b323e8);
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+
+/* Glow on hover */
+.createStory:hover {
+  box-shadow: 0 0 20px #8e44ad, 0 0 40px #3498db;
+  transform: translateY(-3px);
+}
+
+
+/* Create two stars */
+.createStory::before,
+.createStory::after {
+  content: "✦";
+  position: absolute;
+  color: #ffe66d;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* First star */
+.createStory::before {
+  top: 0;
+  left: 20%;
+  font-size: 20px;
+}
+
+/* Second star */
+.createStory::after {
+  top: 0;
+  right: 20%;
   font-size: 16px;
 }
 
-.backLink:hover {
-  text-decoration: underline;
+/* Make stars float when hovering */
+.createStory:hover::before {
+  animation: starFloat 1.5s ease-out forwards;
 }
+
+.createStory:hover::after {
+  animation: starFloat 1.5s ease-out 0.3s forwards;
+}
+
+@keyframes starFloat {
+  0% {
+    transform: translateY(0) scale(3.0) rotate(0deg);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-50px) scale(1.2) rotate(90deg);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 body {
@@ -122,3 +234,63 @@ body {
     text-align: right;
     direction: rtl;
 }
+
+
+
+
+
+
+
+
+.readStory {
+  display: inline-block;
+  margin: 15px 0;
+  padding: 4px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #593777;
+  background: linear-gradient(135deg, #fffaff, #f0e6ff);
+  border: 2px solid #b99add;
+  border-radius: 15px;
+  outline: 1px solid #e0c9f5;
+  outline-offset: 4px;
+  box-shadow: 0 5px 15px rgba(89, 55, 119, 0.15);
+}
+
+
+
+.readAloud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: rtl;
+  padding-top: 20px;
+    padding-bottom: 20px;
+
+
+}
+
+.readAloud p {
+  margin: 0;
+}
+
+
+.soundButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #f0e8fa;
+  color: #51366f;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.soundButton:hover {
+  background: #dfcef4;
+  transform: scale(1.1);
+}
+
