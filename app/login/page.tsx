@@ -190,81 +190,97 @@ export default function Login() {
 
 
 
-    async function handleSignup(){
-    
-        try{
-    
+
+    async function handleSignup() {
+        setError("");
+        setMessage("");
+
+        try {
             const response = await fetch("/api/auth/signup", {
-        
-                    method:"POST",
-                    headers:{
-                                "Content-Type": "application/json"
-                    },
-                    body:JSON.stringify({
-                        username,
-                        email,
-                        password: pass,
-                    })
-        
-            })
-    
-        
-            const data =   await response.json()
-    
-            if (!response.ok){
-                 setError(data.error || "Registration failed.");
-                 return;
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // Send ONLY the email address.
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || "Could not send verification code.");
+                return;
             }
 
-            setStep("verify")
+            setStep("verify");
             setMessage("A verification code has been sent to your email.");
-
-    
-        
-        }catch(error){
+        } catch {
             setError("Could not connect to the server.");
         }
-    
     }
 
-    async function handleVerifyEmail(e: React.FormEvent<HTMLFormElement>){
-             e.preventDefault();
 
-        try{
 
-            const response = await fetch("/api/auth/verify-email", {
-                method:"POST",
-                headers:{
+    async function handleVerifyEmail(
+        e: React.FormEvent<HTMLFormElement>
+    ) {
+        e.preventDefault();
+        setError("");
+        setMessage("");
+
+        try {
+            // First, verify the email code.
+            const verifyResponse = await fetch("/api/auth/verify-email", {
+                method: "POST",
+                headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-
                     email,
-                    code: verificationCode, 
-                })
-            })
+                    code: verificationCode,
+                }),
+            });
 
-            const data = await response.json()
+            const verifyData = await verifyResponse.json();
 
-            if (!response.ok) {
-                setError(data.error || "Email verification failed.");
+            if (!verifyResponse.ok) {
+                setError(verifyData.error || "Email verification failed.");
                 return;
-                
-    }
-                setMessage("Email verified successfully! You can now log in.");
-                setStep("register");
-                setIsRegister(true);
-               setVerificationCode(""); 
+            }
 
+            // The code is correct. Now save the registration details.
+            const signupResponse = await fetch("/api/auth/complete-signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password: pass,
+                }),
+            });
 
+            const signupData = await signupResponse.json();
 
+            if (!signupResponse.ok) {
+                setError(signupData.error || "Could not complete registration.");
+                return;
+            }
 
-        }catch{
-
-            setError("Could not verify the email.");
+            // Registration is complete. Return to the login form.
+            setMessage("Your account has been created successfully! You can now log in.");
+            setStep("register");
+            setIsRegister(true);
+            setVerificationCode("");
+            setPass("");
+            setUsername("");
+        } catch {
+            setError("Could not connect to the server.");
         }
     }
-    
+
+
     async function handleLogin() {
                     
     

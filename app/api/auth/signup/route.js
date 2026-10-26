@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import { randomInt, createHash } from "crypto";
 import pool from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/email";
+import pendingVerifications from "@/lib/pending-verifications";
 
 // Temporary in-memory storage for verification codes.
 // NOTE: This is suitable for local development only.
 // It loses data on server restart and doesn't work reliably
 // across multiple server instances.
-const pendingVerifications = new Map();
 
 export async function POST(request) {
   try {
@@ -74,4 +74,3 @@ export async function POST(request) {
     );
   }
 }
-```
