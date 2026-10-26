@@ -79,26 +79,32 @@ export default function Home() {
 
             <p>جدیدترین ها</p>
 
-            {stories.slice(-3).map((story) => (
-                    <Link
-                      href={`/stories/${story.id}`}
-                      className={styles.card}
-                      key={story.id}
-                    >
-                      {story.image_url &&
-                      (<Image
-                        src={story.image_url}
-                        alt={story.title}
-                        width={300}
-                        height={200}
-                        className={styles.cardImage}
-                      />)}
+            <div className={styles.storiesContainer}>
+                {stories.slice(-3).map((story) => (
+                        <Link
+                          href={`/stories/${story.id}`}
+                          className={styles.card}
+                          key={story.id}
+                        >
+                          {story.image_url &&
+                          (<Image
+                            src={story.image_url}
+                            alt={story.title}
+                            width={300}
+                            height={200}
+                            className={styles.cardImage}
+                          />)}
 
-                      <h3 className={styles.cardTitle}>{story.title}</h3>
-                    </Link>
-              ))}
+                          <h3 className={styles.cardTitle}>{story.title}</h3>
+                        </Link>
+                  ))}
 
-            <Link href="/stories" className={styles.allStories}> همه قصه ها </Link>
+            </div>
+
+            <div className={styles.allStoriesContainer}>
+              <Link href="/stories" className={styles.allStories}> همه قصه ها </Link>
+
+            </div>
 
 
       </section>

@@ -9,18 +9,21 @@ import { useRouter } from "next/navigation";
 
 
 
-
-
-
 export default function Login() {
 
     const [isRegister, setIsRegister] = useState(true);
+    const [verificationCode, setVerificationCode] = useState("");
+    const [message, setMessage] = useState("");
+    const [step, setStep] = useState<"register" | "verify">("register");
+    const [error, setError] = useState("");
+
+
+
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const [username, setUsername] = useState("")
     
     const router = useRouter();
-    const [loginError, setLoginError] = useState("");
     
 
 
@@ -30,7 +33,7 @@ export default function Login() {
 
                 <section className={styles.loginSection}>
 
-                    <Link href="/" className={styles.backLink}>   بازگشت به خانه  </Link>
+                    <Link href="/" className={styles.backLink}> بازگشت به خانه </Link>
 
                     <div>
                                 <h1 className={styles.title}>خوش آمدید👋</h1>
@@ -44,7 +47,7 @@ export default function Login() {
 
 
                                         <form className={styles.form} 
-                                                onSubmit={(e) => {e.preventDefault();  handleLogin(email, pass, router, setLoginError);}}>
+                                                onSubmit={(e) => {e.preventDefault();  handleLogin();}}>
                                             
                                             <label htmlFor="email">ایمیل</label>
 
@@ -78,12 +81,13 @@ export default function Login() {
                                 </>
 
                                 ) : (
+
                                 <>
                                     <button type="button" className={styles.backButton}
                                          onClick={() => setIsRegister(true)}>  بازگشت ←</button>
 
 
-                                    <form className={styles.form}>
+                                    <form className={styles.form} onSubmit={(e) => {e.preventDefault(); handleSignup()}}>
 
                                         <label htmlFor="username">نام</label>
 
@@ -92,9 +96,6 @@ export default function Login() {
                                             onChange={(e) => setUsername(e.target.value)}>
 
                                         </input>
-
-
-
 
                                         <label htmlFor="email">ایمیل</label>
 
@@ -110,15 +111,60 @@ export default function Login() {
                                         <input id="password" type="password" 
                                             required placeholder="رمز عبور خود را تعیین کنید"
                                             onChange={(e) => setPass(e.target.value)}></input>
+
+                                        <button type="submit" className={styles.button}>
+                                                ثبت نام
+                                        </button>
         
 
-                                        <button type="button" className={styles.button} 
-                                            onClick={() => (setIsRegister(true), createUser(username, email, pass))}>ثبت‌نام</button>
-
                                     </form>
+                                    {message && <p role="status">{message}</p>}
+                                    {error && <p role="alert">{error}</p>}
+                        
                                 
+                                    {step === "verify" && (
+                                        <form
+                                            className={styles.form}
+                                            onSubmit={handleVerifyEmail}
+                                        >
+                                            <h2>Verify your email 📧</h2>
+
+                                            <p>
+                                            Enter the six-digit code sent to:
+                                            <br />
+                                            <strong>{email}</strong>
+                                            </p>
+
+                                            <input
+                                            type="text"
+                                            inputMode="numeric"
+                                            autoComplete="one-time-code"
+                                            maxLength={6}
+                                            pattern="[0-9]{6}"
+                                            required
+                                            value={verificationCode}
+                                            onChange={(e) =>
+                                                setVerificationCode(
+                                                e.target.value.replace(/\D/g, "").slice(0, 6)
+                                                )
+                                            }
+                                            placeholder="Enter verification code"
+                                            />
+
+                                            <button type="submit" className={styles.button}>
+                                                Verify email
+                                            </button>
+                                        </form>
+                                    )}
+                                    {message && <p role="status">{message}</p>}
+                                    {error && <p role="alert">{error}</p>}
+                            
+                                  
                                 </>
+                            
                                 )}
+                                
+                        
 
                     </div>
                     
@@ -140,73 +186,120 @@ export default function Login() {
 
 
     )
-}
 
 
 
-async function createUser(userName: string, userEmail:string, userPass:string){
 
-    try{
-
-        const response = await fetch("/api/auth/signup", {
+    async function handleSignup(){
     
-                method:"POST",
-                headers:{
-                            "Content-Type": "application/json"
-                },
-                body:JSON.stringify({
-                    username: userName,
-                    email:userEmail,
-                    password:userPass
-                })
+        try{
     
-    
-        })
-    
-              const result =   await response.json()
-                console.log(result);
-
-    }catch(error){
-        console.error("Signup error:", error);
-    }
-
-
-
-}
-
-
-
-
-
-async function handleLogin( 
-    userEmail:string, userPass:string, userRouter: ReturnType<typeof useRouter>,
-     userSetLoginError: (message: string) => void) {
-
-        userSetLoginError("");
+            const response = await fetch("/api/auth/signup", {
         
-
-        try {
-            const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: userEmail,
-                password: userPass,
-            }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-            userSetLoginError(data.message || "Login failed.");
-            return;
+                    method:"POST",
+                    headers:{
+                                "Content-Type": "application/json"
+                    },
+                    body:JSON.stringify({
+                        username,
+                        email,
+                        password: pass,
+                    })
+        
+            })
+    
+        
+            const data =   await response.json()
+    
+            if (!response.ok){
+                 setError(data.error || "Registration failed.");
+                 return;
             }
 
-            // Login succeeded: navigate to the profile page.
-            userRouter.push("/profile");
-        } catch {
-            userSetLoginError("Something went wrong. Please try again.");
+            setStep("verify")
+            setMessage("A verification code has been sent to your email.");
+
+    
+        
+        }catch(error){
+            setError("Could not connect to the server.");
         }
+    
+    }
+
+    async function handleVerifyEmail(e: React.FormEvent<HTMLFormElement>){
+             e.preventDefault();
+
+        try{
+
+            const response = await fetch("/api/auth/verify-email", {
+                method:"POST",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+
+                    email,
+                    code: verificationCode, 
+                })
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                setError(data.error || "Email verification failed.");
+                return;
+                
+    }
+                setMessage("Email verified successfully! You can now log in.");
+                setStep("register");
+                setIsRegister(true);
+               setVerificationCode(""); 
+
+
+
+
+        }catch{
+
+            setError("Could not verify the email.");
+        }
+    }
+    
+    async function handleLogin() {
+                    
+    
+                try {
+                    const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password: pass,
+                    }),
+                    });
+    
+                    const data = await response.json();
+    
+                    if (!response.ok) {
+                        setError(data.error || "Login failed.");
+                    return;
+                    }
+    
+                    // Login succeeded: navigate to the profile page.
+                    router.push("/profile");
+                } catch {
+                    setError("Could not login to the server.");
+                }
+        }
+
+
 }
+
+
+
+
+
+
+

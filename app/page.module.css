@@ -1,7 +1,7 @@
 .section1 {
   position: relative;
   width: 100%;
-  height: 670px; /* Change this to your preferred height */
+  height: 850px; /* Change this to your preferred height */
   overflow: hidden;
 }
 
@@ -87,28 +87,32 @@ body {
 
 
 
+
+
+
 /*section2*/
 
 
 .section2 {
-  display: flex;
+  display: block;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
   gap: 16px;
   padding-top: 30px;
+    direction: rtl;
+
 }
 
 .section2 p {
+    box-sizing: border-box;
+    padding-right: 30px;
+    padding-left: 30px;
     width: 100%;
     display: flex;
     text-align: right;
-    padding-right: 30px;
     gap: 24px;
     direction: rtl;
-    padding-left: 30px;
-
-
 }
 
 .section2 p::after {
@@ -116,27 +120,54 @@ body {
   flex: 1;
   height: 1px;
   background-color: white;
-    align-self: center;
+  align-self: center;
 
 }
 
 
-.allStories {
-  display: inline-block;
-  padding: 12px 32px;
+
+/* Container for the story cards */
+.storiesContainer {
+  box-sizing: border-box;
+  padding-right: 30px ;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100%;
+  
+}
+
+
+/* Container for the "all stories" link */
+.allStoriesContainer {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
   margin-top: 20px;
-  border-radius: 30px;
+  direction: rtl;
+}
 
-  background: linear-gradient(135deg, #e1c01c, #b323e8);
-  color: white;
-  text-decoration: none;
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
 
-  box-shadow: 0 0 10px rgba(200, 62, 90, 0.5);
+.allStories {
+    flex-basis: auto; /* Don't occupy the full row */
+    width: fit-content;
+    display: inline-block;
+    padding: 12px 32px;
+    margin-top: 20px;
+    margin-right: 30px;
+    border-radius: 30px;
 
-  transition: transform 0.7s ease;
+    background: linear-gradient(135deg, #e1c01c, #b323e8);
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+
+    box-shadow: 0 0 10px rgba(200, 62, 90, 0.5);
+
+    transition: transform 0.7s ease;
 
 }
 
@@ -144,6 +175,16 @@ body {
   transform: translateY(-7px);
   box-shadow: 0 0 20px #8e44ad, 0 0 40px #3498db;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -226,6 +267,9 @@ body {
 
 
 
+
+
+
 .card {
   display: flex;
   flex-direction: column;
@@ -267,13 +311,29 @@ body {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .section3 {
   position: relative;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 500px;
+  min-height: 600px;
   margin-top: 40px; /* Space between section2 and section3 */
 }
 
