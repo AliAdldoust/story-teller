@@ -7,14 +7,15 @@ import {Volume2} from 'lucide-react'
 
 
 
-
-
 export default function CreateStory() {
     const [step, setStep] = useState(1);
+    const [story, setStory] = useState("");
+    
     const [wordCount, setWordCount] = useState(100);
     const [keywords, setKeywords] = useState("");
 
-    const [story, setStory] = useState("");
+    const [audioUrl, setAudioUrl] = useState("");
+
 
     const handleNext = () => {
     setStep(step+1);
@@ -27,7 +28,8 @@ export default function CreateStory() {
 
 
 
-   async function handleReadAloud() {
+
+    async function handleReadAloud() {
     try {
 
         const response = await fetch("/api/tts", {
@@ -40,28 +42,27 @@ export default function CreateStory() {
         }),
         });
 
-        if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Could not generate audio.");
+
+
+      const audioBlob = await response.blob();
+
+      const newAudioUrl = URL.createObjectURL(audioBlob);
+
+      setAudioUrl((previousUrl) => {
+        if (previousUrl) {
+          URL.revokeObjectURL(previousUrl);
         }
 
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
+        return newAudioUrl;
+      });
 
-        const audio = new Audio(audioUrl);
-
-        audio.onended = () => URL.revokeObjectURL(audioUrl);
-
-        await audio.play();
+          
+        
     } catch (error) {
-        console.error("Audio error:", error);
-        alert(
-        error instanceof Error
-            ? error.message
-            : "Could not play the story."
-        );
+        console.error("Error reading story:", error);
     }
     }
+
 
 
 
@@ -106,11 +107,11 @@ export default function CreateStory() {
                             max="2000"
                             step="10"
                             value={wordCount}
-                            onChange={(e) => setWordCount(e.target.value)}
+                            onChange={(e) => setWordCount(Number(e.target.value))}
                             className={styles.input}
                             />
 
-                            <button onClick={handleNext} className={styles.button}>
+                            <button type="button" onClick={handleNext} className={styles.button}>
                             ادامه ✨
                             </button>
                     </form>
@@ -152,7 +153,7 @@ export default function CreateStory() {
                             type="button"
                             onClick={async () => {
                                 const generatedStory = await generateStory(
-                                    keywords.split(",").map(word => word.trim()), wordCount
+                                    keywords.split(",").map(words => words.trim()), wordCount
                                 );
                                 setStory(generatedStory);
                                 handleNext();
@@ -181,6 +182,14 @@ export default function CreateStory() {
                                         <Volume2 size={22} />
                                         </button>
                                     </div>
+                                    {audioUrl && (
+                                            <audio
+                                                controls
+                                                autoPlay
+                                                src={audioUrl}
+                                                style={{ width: "100%", marginTop: "16px" }}
+                                            />
+                                            )}
                             <button  className={styles.createStory} onClick={() => window.location.reload()}>دوباره</button>
                         </div>
                     )}
@@ -196,7 +205,7 @@ export default function CreateStory() {
 
 
 
-async function generateStory(words, number) {
+async function generateStory(words: string[], number:number) {
 
     const response = await fetch("/api/generate-story", {
         method: "POST",

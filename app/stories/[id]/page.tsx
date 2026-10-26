@@ -22,6 +22,7 @@ function StoryContent() {
   const [story, setStory] = useState<Story | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
     async function fetchStory() {
@@ -68,26 +69,24 @@ function StoryContent() {
         }),
         });
 
-        if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Could not generate audio.");
+
+
+      const audioBlob = await response.blob();
+
+      const newAudioUrl = URL.createObjectURL(audioBlob);
+
+      setAudioUrl((previousUrl) => {
+        if (previousUrl) {
+          URL.revokeObjectURL(previousUrl);
         }
 
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
+        return newAudioUrl;
+      });
 
-        const audio = new Audio(audioUrl);
-
-        audio.onended = () => URL.revokeObjectURL(audioUrl);
-
-        await audio.play();
+          
+        
     } catch (error) {
-        console.error("Audio error:", error);
-        alert(
-        error instanceof Error
-            ? error.message
-            : "Could not play the story."
-        );
+        console.error("Error reading story:", error);
     }
     }
 
@@ -126,6 +125,15 @@ function StoryContent() {
             <Volume2 size={22} />
             </button>
         </div>
+
+        {audioUrl && (
+          <audio
+            controls
+            autoPlay
+            src={audioUrl}
+            style={{ width: "100%", marginTop: "16px" }}
+          />
+        )}
 
         <Link href="/stories" className={styles.backLink}>بازگشت</Link>
 
