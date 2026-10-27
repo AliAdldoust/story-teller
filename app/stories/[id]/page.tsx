@@ -23,6 +23,10 @@ function StoryContent() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [audioUrl, setAudioUrl] = useState("");
+  const [activeCard, setActiveCard] = useState(1);
+
+
+
 
   useEffect(() => {
     async function fetchStory() {
@@ -59,55 +63,59 @@ function StoryContent() {
     async function handleReadAloud() {
     try {
 
-        const response = await fetch("/api/tts", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            text: story?.content,
-        }),
-        });
+          const response = await fetch("/api/tts", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              text: story?.content,
+              voice: activeCard === 1 ? "grandfather" : "grandmother"
 
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.details || error.error || "TTS failed");
-        }
-        
-                // Get the raw PCM bytes from the backend.
-        const arrayBuffer = await response.arrayBuffer();
+          }),
+          });
 
-        // PCM settings — these must match the format returned by your API.
-        const sampleRate = 24000;
-        const audioContext = new AudioContext({ sampleRate });
-
-        await audioContext.resume();
-
-        // Convert signed 16-bit PCM samples to Float32 samples.
-        const pcmData = new Int16Array(arrayBuffer);
-        const audioBuffer = audioContext.createBuffer(
-          1,
-          pcmData.length,
-          sampleRate
-        );
-
-        const channelData = audioBuffer.getChannelData(0);
-
-        for (let i = 0; i < pcmData.length; i++) {
-          channelData[i] = pcmData[i] / 32768;
-        }
-
-        // Play the audio.
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-        source.start();
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.details || error.error || "TTS failed");
+          }
           
-        
-    } catch (error) {
-        console.error("Error reading story:", error);
-    }
-    }
+          // Get the raw PCM bytes from the backend.
+          const arrayBuffer = await response.arrayBuffer();
+
+          // PCM settings — these must match the format returned by your API.
+          const sampleRate = 24000;
+          const audioContext = new AudioContext({ sampleRate });
+
+          await audioContext.resume();
+
+          // Convert signed 16-bit PCM samples to Float32 samples.
+          const pcmData = new Int16Array(arrayBuffer);
+          const audioBuffer = audioContext.createBuffer(
+            1,
+            pcmData.length,
+            sampleRate
+          );
+
+          const channelData = audioBuffer.getChannelData(0);
+
+          for (let i = 0; i < pcmData.length; i++) {
+            channelData[i] = pcmData[i] / 32768;
+          }
+
+          // Play the audio.
+          const source = audioContext.createBufferSource();
+          source.buffer = audioBuffer;
+          source.connect(audioContext.destination);
+          source.start();
+            
+          
+      } catch (error) {
+          console.error("Error reading story:", error);
+      }
+
+
+}
 
 
 
@@ -133,12 +141,26 @@ function StoryContent() {
         <div className={styles.readAloud}>
             <p className={styles.readStory}>قصه را بخوان</p>
 
+            <div
+                className={activeCard === 1 ? styles.activeCard : styles.card}
+                onClick={() => setActiveCard(1)}>
+                <img src="/image1.jpeg" alt="Card 1" />
+            </div>
+
+
+            <div
+              className={activeCard === 2 ? styles.activeCard : styles.card}
+              onClick={() => setActiveCard(2)}>
+              <img src="/image3.jpg" alt="Card 2" />
+            </div>
+
+
             <button
-            type="button"
-            onClick={handleReadAloud}
-            aria-label=" قصه را بخوان"
-            className={styles.soundButton}
-            >
+              type="button"
+              onClick={handleReadAloud}
+              aria-label=" قصه را بخوان"
+              className={styles.soundButton}
+              >
             <Volume2 size={22} />
             </button>
         </div>

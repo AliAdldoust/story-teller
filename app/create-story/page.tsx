@@ -13,6 +13,8 @@ export default function CreateStory() {
     
     const [wordCount, setWordCount] = useState(100);
     const [keywords, setKeywords] = useState("");
+    const [activeCard, setActiveCard] = useState(1);
+
 
     const [audioUrl, setAudioUrl] = useState("");
 
@@ -27,11 +29,10 @@ export default function CreateStory() {
 
 
 
-
-
     async function handleReadAloud() {
     try {
 
+        console.log("Selected voice:", activeCard === 1 ? "grandfather" : "grandmother");
         const response = await fetch("/api/tts", {
         method: "POST",
         headers: {
@@ -39,23 +40,45 @@ export default function CreateStory() {
         },
         body: JSON.stringify({
             text: story,
+            voice: activeCard === 1 ? "grandfather" : "grandmother"
         }),
         });
+        
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.details || error.error || "TTS failed");
+        }
+        
 
+        // Get the raw PCM bytes from the backend.
+        const arrayBuffer = await response.arrayBuffer();
 
+        // PCM settings — these must match the format returned by your API.
+        const sampleRate = 24000;
+        const audioContext = new AudioContext({ sampleRate });
 
-      const audioBlob = await response.blob();
+        await audioContext.resume();
 
-      const newAudioUrl = URL.createObjectURL(audioBlob);
+        // Convert signed 16-bit PCM samples to Float32 samples.
+        const pcmData = new Int16Array(arrayBuffer);
+        const audioBuffer = audioContext.createBuffer(
+          1,
+          pcmData.length,
+          sampleRate
+        );
 
-      setAudioUrl((previousUrl) => {
-        if (previousUrl) {
-          URL.revokeObjectURL(previousUrl);
+        const channelData = audioBuffer.getChannelData(0);
+
+        for (let i = 0; i < pcmData.length; i++) {
+          channelData[i] = pcmData[i] / 32768;
         }
 
-        return newAudioUrl;
-      });
-
+        // Play the audio.
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+        source.start();
           
         
     } catch (error) {
@@ -69,23 +92,18 @@ export default function CreateStory() {
 
 
 
-
-
-
-
-
   return (
 
 
 
-    <main className={styles.home_page}>
+    <main className={styles.container}>
 
         <section>
                 <Link href="/" className={styles.backLink}>
                       برگشت به خانه 
                 </Link>
-
         </section>
+        
 
     {step === 1 && (
         <div>
@@ -161,6 +179,7 @@ export default function CreateStory() {
                             }}
                         >
                             ساخت داستان
+
                         </button>
 
                 </form>
@@ -173,6 +192,23 @@ export default function CreateStory() {
                             <p>{story}</p>
                                     <div className={styles.readAloud}>
                                         <p className={styles.readStory}>قصه را بخوان</p>
+
+
+                                        <div
+                                            className={activeCard === 1 ? styles.activeCard : styles.card}
+                                            onClick={() => setActiveCard(1)}>
+                                            <img src="/image1.jpeg" alt="Card 1" />
+                                        </div>
+
+
+                                        <div
+                                            className={activeCard === 2 ? styles.activeCard : styles.card}
+                                            onClick={() => setActiveCard(2)}>
+                                            <img src="/image3.jpg" alt="Card 2" />
+                                        </div>
+
+
+
 
                                         <button
                                         type="button"

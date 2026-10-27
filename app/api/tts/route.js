@@ -8,7 +8,7 @@ const client = new OpenAI({
 
 export async function POST(request) {
   try {
-    const { text } = await request.json();
+    const { text, voice } = await request.json();
 
     if (typeof text !== "string" || !text.trim()) {
       return Response.json(
@@ -22,8 +22,8 @@ export async function POST(request) {
       input: text,
       voice: "Kore",
       response_format: "pcm",
-      instructions: `Speak warmly and gently, like a very old grandmother telling a bedtime story.
-      Being old must be obvious in the her voice`
+      instructions: `Speak warmly and gently, like a very old ${voice} telling a bedtime story.
+      Being old must be obvious in the voice`
     });
 
     const audioBuffer = Buffer.from(
