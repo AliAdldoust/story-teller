@@ -1,101 +1,55 @@
 
+import OpenAI from "openai";
 
-export async function POST(request){
+const client = new OpenAI({
+  apiKey: process.env.BOXAPI_API_KEY,
+  baseURL: "https://ai.boxapi.ir/ai/v1",
+});
 
-  try{
+export async function POST(request) {
+  try {
     const { text } = await request.json();
 
-      if (!text || typeof text !== "string") {
+    if (typeof text !== "string" || !text.trim()) {
       return Response.json(
-        { error: "Please provide text to read."},
+        { error: "Please provide text to read." },
         { status: 400 }
       );
     }
 
-    if (text.length > 1000) {
-      return Response.json(
-        { error: "Text must be 1,000 characters or fewer." },
-        { status: 400 }
-      );
-    }
+    const audioResponse = await client.audio.speech.create({
+      model: "gemini-3.8-flash-tts",
+      input: text,
+      voice: "Kore",
+      response_format: "pcm",
+    });
 
-    const ttsResponse = await fetch("https://freetts.org/api/v1/tts", 
-      {method: "POST", 
-        headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.FREETTS_API_KEY,
-      },
-      body: JSON.stringify({
-        text,
-        voice: "fa-IR-FaridNeural",
-        rate: "+0%",
-        pitch: "+0Hz",
-        output_format: "mp3",
-      }),
-
-      }
-    )
-
-      const ttsData = await ttsResponse.json();
-
-      if (!ttsResponse.ok) {
-        console.error("FreeTTS status:", ttsResponse.status);
-        console.error("FreeTTS response:", ttsData);
-
-        return Response.json(
-          {
-            error:
-              ttsData.message ||
-              ttsData.error ||
-              JSON.stringify(ttsData) ||
-              "FreeTTS could not generate the audio.",
-          },
-          { status: ttsResponse.status }
-        );
-      }
-
-
-
-    const audioResponse = await fetch(
-      `https://freetts.org/api/audio/${encodeURIComponent(
-        ttsData.file_id
-      )}`
+    const audioBuffer = Buffer.from(
+      await audioResponse.arrayBuffer()
     );
 
-    if (!audioResponse.ok) {
-      return Response.json(
-        { error: "Could not download the generated audio." },
-        { status: 502 }
-      );
-    }
-
-
-
-        return new Response(audioResponse.body, {
-            headers: {
-              "Content-Type": "audio/mpeg",
-              "Cache-Control": "no-store",
-            },
-          });
-
-
-
-
-
-
-
-
-
-  }catch(error){
-    console.error("TTS error:", error);
+    return new Response(audioBuffer, {
+      status: 200,
+      headers: {
+        "Content-Type": "audio/mpeg",
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch (error) {
+    console.error("Gemini TTS error:", {
+      message: error.message,
+      status: error.status,
+      details: error.error,
+      requestID: error.requestID,
+    });
 
     return Response.json(
-      { error: "Could not generate audio." },
-      { status: 500 }
+      {
+        error: "Could not generate audio.",
+        details:
+          error.error?.message || error.message,
+      },
+      { status: error.status || 500 }
     );
-
-
   }
-
-
 }

@@ -69,28 +69,45 @@ function StoryContent() {
         }),
         });
 
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.details || error.error || "TTS failed");
+        }
+        
+                // Get the raw PCM bytes from the backend.
+        const arrayBuffer = await response.arrayBuffer();
 
+        // PCM settings — these must match the format returned by your API.
+        const sampleRate = 24000;
+        const audioContext = new AudioContext({ sampleRate });
 
-      const audioBlob = await response.blob();
+        await audioContext.resume();
 
-      const newAudioUrl = URL.createObjectURL(audioBlob);
+        // Convert signed 16-bit PCM samples to Float32 samples.
+        const pcmData = new Int16Array(arrayBuffer);
+        const audioBuffer = audioContext.createBuffer(
+          1,
+          pcmData.length,
+          sampleRate
+        );
 
-      setAudioUrl((previousUrl) => {
-        if (previousUrl) {
-          URL.revokeObjectURL(previousUrl);
+        const channelData = audioBuffer.getChannelData(0);
+
+        for (let i = 0; i < pcmData.length; i++) {
+          channelData[i] = pcmData[i] / 32768;
         }
 
-        return newAudioUrl;
-      });
-
+        // Play the audio.
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+        source.start();
           
         
     } catch (error) {
         console.error("Error reading story:", error);
     }
     }
-
-
 
 
 
