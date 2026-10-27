@@ -22,6 +22,8 @@ export async function POST(request) {
       input: text,
       voice: "Kore",
       response_format: "pcm",
+      instructions: `Speak warmly and gently, like a very old grandmother telling a bedtime story.
+      Being old must be obvious in the her voice`
     });
 
     const audioBuffer = Buffer.from(
