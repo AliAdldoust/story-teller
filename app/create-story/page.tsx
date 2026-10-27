@@ -77,7 +77,8 @@ export default function CreateStory() {
   return (
 
 
-    <main className={styles.container}>
+
+    <main className={styles.home_page}>
 
         <section>
                 <Link href="/" className={styles.backLink}>
@@ -193,9 +194,6 @@ export default function CreateStory() {
                             <button  className={styles.createStory} onClick={() => window.location.reload()}>دوباره</button>
                         </div>
                     )}
-
-
-
 
 
 

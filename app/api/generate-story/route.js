@@ -1,8 +1,8 @@
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  baseURL: "https://api.gapgpt.app/v1",
-  apiKey: process.env.GAPGPT_API_KEY,
+  baseURL: "https://ai.boxapi.ir/ai/v1",
+  apiKey: process.env.BOXAPI_API_KEY,
 });
 
 
@@ -12,36 +12,27 @@ export async function POST(request){
 
         const {words, number} = await request.json();
     
-        if (words.length === 0) {
-        return Response.json(
-            { error: "Please provide some words." },
-            { status: 400 }
-        );
-    }
-
 
 
         // Inside your POST function:
         const response = await client.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-5.4-mini",
 
             messages: [
                 {
                     role: "system",
                     content:
-                        `You are a creative storyteller for children in Persian language. All your generated content 
-                         must be in Persian.
-                         Your content must not be anything other than a story.
-                         Write imaginative stories for children aged between 5 to 10.
-                         The concept of the story must be around the words provided by the user. You must use that words.
-                         if no words are provided, do not ask or explain, generate a random story.`,
+                        `تو یک داستانگوی خلاق برای کودکان به زبان فارسی هستی. تمام محتوایی که تولید میکنی باید به زبان فارسی باشد.
+                         محتوای تو نباید چیزی جز داستان باشد. داستانهای تخیلی برای کودکان بین ۵ تا ۱۰ سال بنویس.
+                         مفهوم داستان باید حول کلماتی باشد که کاربر ارائه میدهد. تو باید از آن کلمات استفاده کنی.
+                         اگر کلمهای ارائه نشد، نپرس و توضیح نده، یک داستان تصادفی تولید کن.`,
                 },
                 {
                     role: "user",
                     content: `Write a children's story with ${number} words, using these words: ${words.join(", ")}`,
                 },
             ],
-            max_tokens: 700,
+            max_completion_tokens: 700,
 
         });
 
@@ -52,7 +43,7 @@ export async function POST(request){
     }
 
      catch (error) {
-    console.error("Hugging face ERROR:", error);
+    console.error("BOX API error:", error);
 
     return Response.json(
         { error: String(error) },

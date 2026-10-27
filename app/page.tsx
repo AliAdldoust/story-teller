@@ -4,7 +4,7 @@ import BackgroundSlider from "./components/BackgroundSlider";
 
 import Link from "next/link";
 import Image from "next/image";
-import styles from "./page.module.css";
+import styles from "./Home.module.css";
 import {useState, useEffect} from 'react'
 
 
@@ -63,7 +63,7 @@ export default function Home() {
 
 
   return (
-    <main>
+    <main className={styles.home_page}>
       
       <section className={styles.section1}>
 
