@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import {Volume2} from 'lucide-react'
@@ -22,6 +22,10 @@ export default function CreateStory() {
     const handleNext = () => {
     setStep(step+1);
         };
+
+
+
+    useEffect(() => {setStep(1)}, [])
 
 
 
@@ -103,7 +107,7 @@ export default function CreateStory() {
                       برگشت به خانه 
                 </Link>
         </section>
-        
+
 
     {step === 1 && (
         <div>
