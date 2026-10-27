@@ -335,7 +335,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 600px;
+  min-height: 500px;
   margin-top: 40px; /* Space between section2 and section3 */
 }
 
